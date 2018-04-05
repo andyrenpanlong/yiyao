@@ -4,9 +4,7 @@ from bs4 import BeautifulSoup
 import ssl
 import json
 from xlwt import *
-# import xlwt
 import sys
-
 reload(sys)
 sys.setdefaultencoding('utf8')
 requests = requests.Session()
@@ -141,21 +139,14 @@ def get_arr_join(i, num):
 def get_detail(url):
     response = requests.get(url)
     bs = BeautifulSoup(response.text, 'html5lib')
-    arr = []
     h2_list = bs.select("#content h2")
-    print len(h2_list)
     if len(h2_list) == 0:
         data = get_arr_join(bs.select("#content")[0], 0)
-        # file_write(data)
-        print data
         save_file(data)
     else:
         for i in xrange(0, len(h2_list), 1):
             data = get_arr_join(bs.select("#content")[0], i)
             save_file(data)
-
-    # arr.append(obj)
-
 
 def save_file(data):
     f = open('test4.txt', 'a')
@@ -172,30 +163,21 @@ def file_write(Data):
     # 指定打开的文件名
     for i in xrange(0, len(Data), 1):
         data[i+1] = Data[i]
-    # data = {
-    #     "1": ["张三", 150, 120, 100, 2],
-    #     "2": ["wang", 90, 99, 95, 65],
-    #     "3": ["wu", 60, 66, 68, 566]
-    # }
     # 字典数据
-
     ldata = []
     num = [a for a in data]
     # for循环指定取出key值存入num中
     num.sort()
     # 字典数据取出后无需，需要先排序
-
     for x in num:
         # for循环将data字典中的键和值分批的保存在ldata中
         t = [x]
         for a in data[x]:
             t.append(a)
         ldata.append(t)
-
     for i, p in enumerate(ldata):
         # 将数据写入文件,i是enumerate()函数返回的序号数
         for j, q in enumerate(p):
-            print i, j, q
             table.write(i, j, q)
     file.save('yaocai2.xls')
 
@@ -239,6 +221,5 @@ if __name__ == '__main__':
     # url = "http://www.zysj.com.cn/zhongyaocai/yaocai_z/zuiyucao.html"
     # get_detail(url)
     data = read_file()
-    print data
     file_write(data)
 
